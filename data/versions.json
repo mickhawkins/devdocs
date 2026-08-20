@@ -7,7 +7,7 @@
             "generalEndDate": "4 October 2027",
             "securityEndDate": "1 October 2029",
             "isLTS": true,
-            "codeFreezeDate": "24 August 2026",
+            "codeFreezeDate": "31 August 2026",
             "releases": [
                 {
                     "name": "5.3.0",
