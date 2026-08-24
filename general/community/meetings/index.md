@@ -11,8 +11,8 @@ sidebar_label: Meetings
 
 We have several more community developer meetings booked in for 2026. The following sessions are now confirmed:
 
-- **19 August 2026 08:00 UTC** - [Moodle LMS front-end evolution](./2026/08.md) - What theme and plugin developers need to know
 - **09 September 2026 09:00 UTC** - [Moodle LMS QA cycle](./2026/09.md) - How community contributions to QA testing ensure smooth major releases and strengthen Moodle LMS for us all *(and how to get involved!)*
+- **15 September 2026 10:30 UTC** - [Ask Marie & Scott Anything](./2026/0915.md) - special Q&A session with Moodle's Chief Product Officer and CEO
 - **14 October 2026 08:00 UTC** - [Accessible Moodle development](./2026/10.md) - How to develop with accessibility in mind, common issues, and testing
 
 ### Future sessions {/* #future-sessions */}
@@ -25,6 +25,7 @@ If you have a topic you would like volunteer to speak about, please reach out vi
 
 ### 2026 {/* #2026 */}
 
+- [Developer meeting August 2026](./2026/08.md) - Moodle LMS front-end evolution: What theme and plugin developers need to know
 - [Developer meeting March 2026](./2026/03.md) - Moodle Design System
 
 ### 2025 {/* #2025 */}
