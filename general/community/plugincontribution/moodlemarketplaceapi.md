@@ -31,7 +31,7 @@ All Moodle Marketplace API endpoints require a bearer token.
 ### Create an API token
 
 1. Log in to Moodle Marketplace.
-2. Go to **Account → Security** (`/account/security`).
+2. Go to **Account → Security** (https://marketplace.moodle.com/account/security).
 3. Under **API tokens**, create a token. Give it a name you'll recognise and, optionally, set an expiry date.
 
 > **Save your token when you create it.** The token is shown only once and is available for 60 seconds. If you lose it, you'll need to revoke it and create a new one.
@@ -80,7 +80,7 @@ Dates use ISO 8601 format with a timezone offset:
 Use this endpoint to submit a new version of a plugin you maintain:
 
 ```text
-POST /api/plugins/{frankenstyle}/versions
+POST https://marketplace.moodle.com/api/plugins/{frankenstyle}/versions
 ```
 
 You must be a maintainer of the plugin. Requests use `multipart/form-data`.
@@ -95,7 +95,7 @@ curl -s -X POST \
      -F "file=@mod_quiz.zip" \
      -F "releaseNotes=Fixes the grade calculation for group submissions" \
      -F "vcsTag=v1.4.0" \
-     "$BASE/plugins/mod_quiz/versions"
+     "https://marketplace.moodle.com/api/plugins/mod_quiz/versions"
 ```
 
 ### Submit a plugin ZIP package by URL
@@ -106,7 +106,7 @@ If the plugin ZIP package is already available online, provide its URL and Moodl
 curl -s -X POST \
      -H "Authorization: Bearer $MKPL_TOKEN" \
      -F "fileUrl=https://github.com/example/moodle-mod_quiz/releases/download/v1.4.0/mod_quiz.zip" \
-     "$BASE/plugins/mod_quiz/versions"
+     "https://marketplace.moodle.com/api/plugins/mod_quiz/versions"
 ```
 
 The URL must use `https` and resolve to a publicly accessible address.
@@ -157,14 +157,14 @@ The `status` is `in_testing`, not `uploaded`. Submitting a version immediately q
 
 | Status | Cause |
 | --- | --- |
-| `403` | You don't maintain this plugin. |
-| `404` | No plugin exists with this frankenstyle. |
-| `409` | The plugin is in a state that does not accept new versions. |
-| `422` | Both `file` and `fileUrl` were provided, or neither was provided. |
-| `422` | The file isn't a ZIP file or doesn't contain a valid `version.php`. |
-| `422` | The build number already exists for this plugin. |
-| `422` | `fileUrl` doesn't use `https`, is unreachable or doesn't resolve to a public address. |
-| `422` | The plugin ZIP package exceeds the Moodle Marketplace size limit. |
+| `403` Forbidden | You don't maintain this plugin. |
+| `404` Not found | No plugin exists with this frankenstyle. |
+| `409` Conflict | The plugin is in a state that does not accept new versions. |
+| `422` Unprocessable Content | Both `file` and `fileUrl` were provided, or neither was provided. |
+| `422` Unprocessable Content | The file isn't a ZIP file or doesn't contain a valid `version.php`. |
+| `422` Unprocessable Content | The build number already exists for this plugin. |
+| `422` Unprocessable Content | `fileUrl` doesn't use `https`, is unreachable or doesn't resolve to a public address. |
+| `422` Unprocessable Content | The plugin ZIP package exceeds the Moodle Marketplace size limit. |
 
 If a submission fails, no version is created. Fix the issue and submit the version again.
 
@@ -174,6 +174,12 @@ If a submission fails, no version is created. Fix the issue and submit the versi
 
 You can use the Moodle Marketplace API to submit a new plugin version automatically as part of a continuous integration (CI) workflow.
 
+:::info
+
+For releasing a new plugin version using GitHub Actions, follow the setup instructions at [moodlehq/moodle-plugin-release](https://github.com/moodlehq/moodle-plugin-release)
+
+:::
+
 The following example shows a basic release job:
 
 ```bash
@@ -182,7 +188,7 @@ set -euo pipefail
 
 : "${MKPL_TOKEN:?set MKPL_TOKEN}"      # a secret in your CI settings, never in the repo
 PLUGIN_FRANKENSTYLE="mod_quiz"
-BASE=https://<marketplace-host>/api
+BASE=https://marketplace.moodle.com/api
 
 response=$(curl -sS -w '\n%{http_code}' -X POST \
   -H "Authorization: Bearer $MKPL_TOKEN" \
@@ -219,4 +225,8 @@ echo "Submitted version $(jq -r .version <<<"$body"), status $(jq -r .status <<<
 - **Plugin ZIP package size:** The same size limit applies as when uploading a plugin ZIP package through Moodle Marketplace. If the package exceeds the limit, the API returns a `422` response.
 - **Remote file retrieval:** Moodle Marketplace stops trying to retrieve a file after 10 seconds or as soon as it exceeds the size limit. If the host is slow, upload the plugin ZIP package instead.
 
-Something missing or not working as expected? Contact the Moodle Marketplace team. The API is still evolving, and your feedback can help shape future improvements.
+:::tip
+
+Something missing or not working as expected? [Contact](https://moodle.atlassian.net/servicedesk/customer/portal/166) the Moodle Marketplace team. The API is still evolving, and your feedback can help shape future improvements.
+
+:::
